@@ -1,0 +1,126 @@
+@import "./reset.css";
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Roboto-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*---------------- default */
+
+html{
+    box-sizing: border-box;
+}
+*,*:before,*:after{
+    box-sizing: inherit;
+}
+body{
+    min-height: 100vh;
+    background-color: #3c3f41;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #000;
+    font-family: "Roboto", serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+button{
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0 none transparent;
+    outline: 0 none transparent;
+    width: fit-content;
+    height: fit-content;
+}
+input,textarea{
+    padding: 0;
+    border: 0 none transparent;
+    outline: 0 none transparent;
+    color: inherit;
+    font-family: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+/*---------------- go-go */
+
+/*.test{*/
+/*    width: 200px;*/
+/*    height: 200px;*/
+/*    background-color: tomato;*/
+/*}*/
+
+.appBox{
+    width: 660px;
+    /*height: 760px;*/
+    background: #C4C4C4;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 80px;
+    gap: 60px;
+}
+
+.searchBlock{
+    /*background-color: tomato;*/
+    /*height: 200px;*/
+}
+.searchBlock__inputWrapper{}
+.searchBlock__input{
+    width: 100%;
+    height: 60px;
+    font-size: 48px;
+    padding: 0 15px;
+    background: #FFF;
+}
+.searchBlock__coinsList{}
+.searchBlock__coinItem{}
+.searchBlock__coinBtn{
+    width: 100%;
+    height: 44px;
+    font-size: 30px;
+    border: 2px solid #000;
+    background: #E3E3E3;
+    text-align: left;
+    padding: 0 15px;
+}
+.searchBlock__coinBtn:hover{
+    background-color: aqua;
+}
+
+.resultBlock{
+    /*background-color: chartreuse;*/
+}
+.resultBlock__item{}
+
+.repo{
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    background: #E27BEB;
+    padding: 5px 15px;
+}
+.repo__content{
+    /*background-color: tomato;*/
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.repo__text{
+    font-size: 24px;
+}
+.repo__closeBtn{
+    /*background-color: chartreuse;*/
+    width: 40px;
+    /*height: 100%;*/
+    height: 40px;
+    margin-right: 15px;
+    background-image:   linear-gradient(45deg, transparent 46%, #F00 46%, #F00 54%, transparent 54%),
+                        linear-gradient(135deg, transparent 46%, #F00 46%, #F00 54%, transparent 54%);
+}
