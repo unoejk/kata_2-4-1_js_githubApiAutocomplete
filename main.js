@@ -14,9 +14,10 @@ const reposList=document.querySelector('.resultBlock')
 input.value=""
 input.focus()
 
+// ---------------- searching input
+
 let preString=""
 input.addEventListener('input', ()=>{
-    // console.log('input')
     const oldString=input.value.trim()
     if (oldString===preString.trim()){
         return
@@ -24,49 +25,54 @@ input.addEventListener('input', ()=>{
         preString=oldString
     }
     if (oldString===''){
-        clearEl(coinsList)
+        clearCoinsList()
         return
     }
     setTimeout(()=>{
         const newString=input.value.trim()
         if (oldString===newString){
-            getCoins(newString).then((coins)=>{
-                clearEl(coinsList)
-                viewCoins(coins.items)
-                // console.log(coins.items)
-            })
+            getCoins(newString)
+                .then(coins=>{
+                    clearCoinsList()
+                    viewCoins(coins.items)
+                })
+                .catch(err=>{
+                    console.log(err)
+                    alert('Не получилось получить список, ошибка в консоли')
+                })
         }
     },500)
 })
 
-function clearEl(el){
-    // console.log('clearCoins')
-    while (el.firstChild){
-        el.firstChild.remove()
+function clearCoinsList(){
+    while (coinsList.firstElementChild!==null){
+        coinsList.firstElementChild.remove()
     }
+    activeCoinsArray=[]
 }
 
 function getCoins(name){
-    // console.log('getCoins')
-    return fetch(`https://api.github.com/search/repositories?q=${name}&per_page=5`)
-        .then(response=>response.json())
+    return Promise.resolve().then(()=>{
+        return fetch(`https://api.github.com/search/repositories?q=${name}&per_page=5`).then(
+            response=>response.json()
+        )
+    })
 }
 
+// ---------------- add coins from search
+
+let activeCoinsArray=[]
 function viewCoins(coins){
     if (coins){
         coins.forEach((val,num)=>{
+            activeCoinsArray.push(val)
+
             let newCoin=document.createElement('li')
             newCoin.className='searchBlock__coinItem'
 
             let newCoinBtn=document.createElement('button')
             newCoinBtn.className='searchBlock__coinBtn'
             newCoinBtn.textContent=`${val.name}`
-
-            // я решл их в атрибуты запихнуть, чтобы было удобней использовать, вроде логично и удобно
-            newCoinBtn.setAttribute('data-id',val.id)
-            newCoinBtn.setAttribute('data-name',val.name)
-            newCoinBtn.setAttribute('data-owner',val.owner.login)
-            newCoinBtn.setAttribute('data-stars',val.stargazers_count)
 
             newCoin.append(newCoinBtn)
 
@@ -76,22 +82,30 @@ function viewCoins(coins){
 }
 coinsList.onclick=function (e){
     let target=e.target
-    if (target.className==='searchBlock__coinBtn' && document.getElementById(target.getAttribute('data-id'))===null){
+    if (target.className==='searchBlock__coinBtn'){
+        target=target.parentElement
+    }
+    if (target.className==='searchBlock__coinItem'){
+        let counter=0
+        while (target.previousElementSibling!==null){
+            counter++
+            target=target.previousElementSibling
+        }
         saveRepo(
-            target.getAttribute('data-id'),
-            target.getAttribute('data-name'),
-            target.getAttribute('data-owner'),
-            target.getAttribute('data-stars')
+            activeCoinsArray[counter].name,
+            activeCoinsArray[counter].owner.login,
+            activeCoinsArray[counter].stargazers_count
         )
         input.value=""
-        clearEl(coinsList)
+        clearCoinsList()
     }
 }
 
-function saveRepo(id,name,owner,stars){
+// ---------------- add repositories from coins
+
+function saveRepo(name,owner,stars){
     let newRepo=document.createElement('li')
     newRepo.className='resultBlock__item repo'
-    newRepo.id=id
 
     let newRepoContent=document.createElement('div')
     newRepoContent.className='repo__content'
